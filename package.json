@@ -8,9 +8,6 @@
   },
   "dependencies": {
     "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "node:test": "^0.0.1"
   }
 }
 
