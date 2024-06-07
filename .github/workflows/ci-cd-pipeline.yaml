@@ -43,9 +43,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.AWS_EC2_KEY }}
+
     - name: Deploy to Staging
       run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_EC2_KEY }} ubuntu@staging-ec2-instance-public-dns 'docker pull your-dockerhub-username/nodejs-deployment-pipeline:staging && docker run -d -p 4444:4444 your-dockerhub-username/nodejs-deployment-pipeline:staging'
+        ssh -o StrictHostKeyChecking=no ubuntu@staging-ec2-instance-public-dns 'docker pull your-dockerhub-username/nodejs-deployment-pipeline:staging && docker run -d -p 4444:4444 your-dockerhub-username/nodejs-deployment-pipeline:staging'
 
   deploy-to-production:
     runs-on: ubuntu-latest
@@ -56,7 +61,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.AWS_EC2_KEY }}
+
     - name: Deploy to Production
       run: |
-        ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_EC2_KEY }} ubuntu@production-ec2-instance-public-dns 'docker pull your-dockerhub-username/nodejs-deployment-pipeline:latest && docker run -d -p 4444:4444 your-dockerhub-username/nodejs-deployment-pipeline:latest'
+        ssh -o StrictHostKeyChecking=no ubuntu@production-ec2-instance-public-dns 'docker pull your-dockerhub-username/nodejs-deployment-pipeline:latest && docker run -d -p 4444:4444 your-dockerhub-username/nodejs-deployment-pipeline:latest'
 
